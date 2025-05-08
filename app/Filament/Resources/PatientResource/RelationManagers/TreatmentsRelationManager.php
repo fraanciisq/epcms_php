@@ -4,6 +4,7 @@ namespace App\Filament\Resources\PatientResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\FormsComponent;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -20,7 +21,16 @@ class TreatmentsRelationManager extends RelationManager
             ->schema([
                 Forms\Components\TextInput::make('description')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columnSpan('full'),
+                Forms\Components\Textarea::make('notes')
+                ->maxLength(65535)
+                ->columnSpan('full'),
+                Forms\Components\TextInput::make('price')
+                ->numeric()
+                ->prefix('₱')
+                ->maxValue(42949672.95),
+                
             ]);
     }
 
@@ -30,6 +40,11 @@ class TreatmentsRelationManager extends RelationManager
             ->recordTitleAttribute('description')
             ->columns([
                 Tables\Columns\TextColumn::make('description'),
+                Tables\Columns\TextColumn::make('price')
+                ->money('PHP')
+                ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                ->dateTime(),
             ])
             ->filters([
                 //
